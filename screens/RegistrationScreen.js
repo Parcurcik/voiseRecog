@@ -1,6 +1,15 @@
-import { KeyboardAvoidingView, StyleSheet, Text, TextInput, Touchable, TouchableOpacity, View, Image } from 'react-native'
-import React, {useState} from 'react'
+import { StyleSheet, View, Image, Pressable} from 'react-native'
+import React, { useEffect, useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
+import axios from 'axios'
+import { useAuth } from '../AuthContext'
+import {useWindowDimensions} from 'react-native';
+import { COLORS } from '../assets/colors/colors';
+import CustomInput from './CustomInput';
+import CustomButton from './CustomButton';
+import QuitBtn from '../assets/images/quit_btn.svg'
+import RegWord from '../assets/images/Reg_word.svg'
+
 
 export default function RegistrationScreen() {
   const navigation = useNavigation()
@@ -8,134 +17,163 @@ export default function RegistrationScreen() {
     navigation.navigate('Login')
   }
 
+
+  const [surname, setSurname] = useState('')
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
+
+  const [IsLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState('')
+
+  const [_, setUser] = useAuth()
+
+ 
+  const hanldeRegister = () => {
+    setIsLoading(true)
+    axios({
+      method: 'POST',
+      url: 'https://identitytoolkit.googleapis.com/v1/accounts:signUp',
+      params: {
+        key: 'AIzaSyA-mqI2gljPLMS1KW_InAyE3XzS5tQch2I',
+      },
+      data: {
+        email,
+        password,
+      },
+    })
+      .then((res) => {
+        axios({
+          method: 'POST',
+          url: 'https://identitytoolkit.googleapis.com/v1/accounts:update',
+          params: {
+            key: 'AIzaSyA-mqI2gljPLMS1KW_InAyE3XzS5tQch2I',
+          },
+          data: {
+            idToken: res.data.idToken,
+            displayName: name + ' ' + surname
+          }
+        }).then((r) => {
+          setUser({...r.data, idToken: res.data.idToken})
+        }).catch(e => {
+          console.log(e, 'updaate profile error');
+          alert(e.message);
+        })
+        .finally(() => {
+          setIsLoading(false);
+        })
+
+        console.log(res.data)
+      })
+      .catch((error) => console.log(error.response.request._response))
+  }
+
   return (
-    // Отстилизовать кнопку с функцией toLogin
-    <KeyboardAvoidingView
-      style={styles.container}
-      behavior="padding"
-      scrollEnabled={false}
-      resetScrollToCoords={{ x: 0, y: 0 }}
-    >
-      <View style={styles.inputContainer}>
-        <TextInput
-          placeholderTextColor='rgba(207, 77, 79, 0.5)'
-          placeholder='Имя'
-          /* value={email} */
-          /* onChangeText={text => setEmail(text)}  */
-          style={styles.input}
-        />
-        <TextInput
-            placeholderTextColor='rgba(207, 77, 79, 0.5)'
-            placeholder='Фамилия'
-            /* value={password}  */
-            /* onChangeText={text => setPassword(text)} */
-            style={styles.input}
-            secureTextEntry
-        />
-        <TextInput
-            placeholderTextColor='rgba(207, 77, 79, 0.5)'
-            placeholder='Почта'
-            /* value={password}  */
-            /* onChangeText={text => setPassword(text)} */
-            style={styles.input}
-            secureTextEntry
-        />
-        <TextInput
-            placeholderTextColor='rgba(207, 77, 79, 0.5)'
-            placeholder='Пароль'
-            /* value={password}  */
-            /* onChangeText={text => setPassword(text)} */
-            style={styles.input}
-            secureTextEntry
-        />
-        <TextInput
-            placeholderTextColor='rgba(207, 77, 79, 0.5)'
-            placeholder='Потворите пароль'
-            /* value={password}  */
-            /* onChangeText={text => setPassword(text)} */
-            style={styles.input}
-            secureTextEntry
-        />
-      </View>
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity
-          onPress={() => { }}
-          style={styles.button}
-        >
-          <Text style={styles.button}>Зарегистрироваться</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-        onPress={() => toLogin()}
-        style={styles.registration}
-      >
-        </TouchableOpacity>
-      </View>
-    </KeyboardAvoidingView>
-  )
+    <View
+     style={styles.container}>
+        <View style={styles.header}>
+            <Pressable
+            style={styles.quit_button_cont}
+            onPress={toLogin}>
+                <QuitBtn
+                    style={[styles.quit_button]}
+                    resizeMode='contain'/>
+            </Pressable>
+            <RegWord style={styles.regWord}/>
+            <Image
+                source={require('../assets/images/Logo_small.png')}
+                style={styles.logo_s}
+                resizeMode='contain'/>
+        </View>
+            <View
+             style={styles.cont_inp}
+             behavior="position">
+                <CustomInput 
+                    value={name}
+                    setValue={setName}
+                    placeholder="Имя"
+                    margin={10}/>
+                
+                <CustomInput
+                    value={surname}
+                    setValue={setSurname}
+                    placeholder="Фамилия"
+                    margin={10}/>
+
+                <CustomInput
+                    value={email}
+                    setValue={setEmail} 
+                    placeholder="Логин"
+                    margin={10}/>
+
+                <CustomInput 
+                    placeholder="Пароль"
+                    margin={10}
+                    secureTextEntry={true}/>
+                <CustomInput 
+                    placeholder="Повторите пароль"
+                    value={password}
+                    setValue={setPassword}
+                    margin={10}
+                    secureTextEntry={true}
+                    flex={1}/>
+                <CustomButton 
+                    text={"Зарегистрироваться"}
+                    onPress={hanldeRegister}
+                    margin={0}/>
+            </View>    
+    </View>
+)
 }
 
+
 const styles = StyleSheet.create({
-
-  container:{
-    flex: 1, 
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F3EFEF',
-    marginTop: 100,
-    
-  }, 
-  inputContainer:{
-    width: 265,
+  header: {
+      backgroundColor: 'transeparent',
+      flexDirection: 'column',
+      alignItems:'center',
+      height: 100,
+      paddingTop: 50
   },
 
-  //Навалить теней
-  //Добавить шрифт
-  input:{
-    paddingHorizontal: 25,
-    paddingVertical: 12,
-    backgroundColor: '#FFFFFF',
-    borderRadius: 5,
-    marginTop: 25,
-    fontSize: 20,
-    elevation: 40,
-    shadowColor: 'rgba(207, 77, 79, 0.5)',
-    borderWidth: 2,
-    borderColor: 'rgba(207, 77, 79, 0.3)',
+  container: {
+      flex: 1,
+      backgroundColor: 'rgba(243, 239, 239, 1)',
+      alignItems: 'center',
   },
 
-
-  buttonContainer:{
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 80,
-    flex: 1, 
-    
+  quit_button: {
+      width: 30,
+      height: 10
   },
 
-  //Навалить теней
-  //Добавить шрифт
-  button:{
-    backgroundColor: '#FFFFFF', 
-    width: 265,
-    height: 50,
-    textAlign: 'center',
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 15,
-    color: "rgba(207, 77, 79, 0.5)",
-    fontSize: 24,
-    paddingVertical: 9,
-    elevation: 40,
-    shadowColor: 'rgba(207, 77, 79, 0.5)',
-    borderWidth: 2,
-    borderColor: 'rgba(207, 77, 79, 0.3)',
+  quit_button_cont: {
+      backgroundColor: 'transeparent',
+      width: '100%',
+      alignItems: "center",
+      paddingRight: 325
   },
-  registration:{
-    marginTop: 40,
-    paddingRight: 90,
-    color: "rgba(207, 77, 79, 0.5)",
-    textDecorationLine: 'underline',
-    fontSize: 12,
+
+  logo_s: {
+      width: 110,
+      height: 110,
+      left: 150,
+      top: -130,
   },
-  
+
+  cont_inp: {
+      alignItems: 'center',
+      padding: 40,
+      flex: 1
+  },
+
+  regWord: {
+      alignSelf: 'center',
+      marginTop: 30
+  },
+
+  cont: {
+      flex: 1
+  }
 })

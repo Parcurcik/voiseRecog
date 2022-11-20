@@ -1,123 +1,148 @@
-import { KeyboardAvoidingView, StyleSheet, Text, TextInput, Touchable, TouchableOpacity, View, Image } from 'react-native'
+import { StyleSheet, Text, View, Image, Pressable } from 'react-native'
 import React, {useState} from 'react'
 import { useNavigation } from '@react-navigation/native'
+import axios from 'axios'
+import { useAuth } from '../AuthContext'
+import Header_text from '../assets/images/main_text_img.svg'
+import {useWindowDimensions} from 'react-native';
+import { COLORS } from '../assets/colors/colors';
+import CustomInput from './CustomInput';
+import letterImg from '../assets/images/letter.png'
+import lockImg from '../assets/images/lock.png'
+import CustomButton from './CustomButton';
+
 
 const LoginScreen = () => {
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
+  const {height} = useWindowDimensions()
+
+  const [IsLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState('')
+
   const navigation = useNavigation()
   const toRegistration = () => {
     navigation.navigate('Registration')
   }
 
+  const [_, setUser] = useAuth()
+
+  const hanldeLogin = () => {
+    setIsLoading(true)
+    axios({
+      method: 'POST',
+      url: 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword',
+      params: {
+        key: 'AIzaSyA-mqI2gljPLMS1KW_InAyE3XzS5tQch2I',
+      },
+      data: {
+        email,
+        password,
+      }
+    }).then(res => {
+      setUser(res.data)
+    })
+    .catch(e => {})
+    .finally(() => {
+      setIsLoading(false)
+    })
+
+  }
+
   return (
-    //Сделать чтоб клава не сбивала элементы интерфейса
-    //Добавить лого и градиентную зарисовку
-    <KeyboardAvoidingView
-      style={styles.container}
-      behavior="padding"
-      scrollEnabled={false}
-      resetScrollToCoords={{ x: 0, y: 0 }}
-    >
-    <View style={styles.inputContainer}>
-      <TextInput
-        placeholderTextColor='rgba(207, 77, 79, 0.5)'
-        placeholder='Почта'
-        value={email}
-        onChangeText={text => setEmail(text)} 
-        style={styles.input}
-      />
-     <TextInput
-        placeholderTextColor='rgba(207, 77, 79, 0.5)'
-        placeholder='Пароль'
-        value={password} 
-        onChangeText={text => setPassword(text)}
-        style={styles.input}
-        secureTextEntry
-      />
-    </View>
-    <View style={styles.buttonContainer}>
-      <TouchableOpacity
-        onPress={() => { }}
-        style={styles.button}
-      >
-        <Text style={styles.button}>Войти</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        onPress={() => toRegistration()}
-        style={styles.registration}
-      >
-        <Text style={styles.registration}>Переход на регистрацию</Text>
-      </TouchableOpacity>
-    </View>
-    </KeyboardAvoidingView>
-  )
+        <View style={styles.container}>
+                <View style={styles.headerWrapper}>
+                    <Image
+                        source={require('../assets/images/header_auth.png')}
+                        style={styles.main_header}
+                        resizeMode='contain'
+                    />
+
+                    <Image
+                        source={require('../assets/images/icon_project.png')}
+                        style={styles.main_icon}
+                        resizeMode='contain'
+                    />
+                    
+                    
+                     <Header_text style={[styles.main_icon_text , {height: height * 0.3}]}
+                    resizeMode='contain'/>  
+                </View>
+
+                <CustomInput 
+                    placeholder="Логин" value={email} setValue={setEmail} image = {letterImg} margin={12}/>
+
+                <CustomInput
+                    placeholder="Пароль" value={password} setValue={setPassword} secureTextEntry={true} image = {lockImg}/>
+                
+                <CustomButton text='Войти' onPress={hanldeLogin} />
+
+                <Pressable style={styles.registr} onPress={toRegistration}>
+                    <Text style={styles.text_registr}>Переход на регистрацию</Text>
+                </Pressable>
+        </View>
+    )
 }
 
 export default LoginScreen
 
 const styles = StyleSheet.create({
-  container:{
-    flex: 1, 
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F3EFEF',
-    marginTop: 260,
-    
-  }, 
-  inputContainer:{
-    width: 265,
+
+  container: {
+      flex: 1,
+      backgroundColor: 'rgba(243, 239, 239, 1)',
+      alignItems: 'center',
   },
 
-  //Навалить теней
-  //Добавить шрифт
-  input:{
-    paddingHorizontal: 25,
-    paddingVertical: 12,
-    backgroundColor: '#FFFFFF',
-    borderRadius: 5,
-    marginTop: 25,
-    fontSize: 20,
-    elevation: 40,
-    shadowColor: 'rgba(207, 77, 79, 0.5)',
-    borderWidth: 2,
-    borderColor: 'rgba(207, 77, 79, 0.3)',
+  headerWrapper: {
+      flexDirection: 'column',
+      alignItems: 'center',
+      width: 331,
+      height: 331,
+      marginBottom: 30,
   },
 
-
-  buttonContainer:{
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: -10,
-    flex: 1, 
-    
+  main_icon: {
+      position: 'absolute',
+      width: 259,
+      height: 259,
+      alignSelf: 'center',
+      top: 0,
   },
 
-  //Навалить теней
-  //Добавить шрифт
-  button:{
-    backgroundColor: '#FFFFFF', 
-    width: 265,
-    height: 50,
-    textAlign: 'center',
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 15,
-    color: "rgba(207, 77, 79, 0.5)",
-    fontSize: 24,
-    paddingVertical: 9,
-    elevation: 40,
-    shadowColor: 'rgba(207, 77, 79, 0.5)',
-    borderWidth: 2,
-    borderColor: 'rgba(207, 77, 79, 0.3)',
+  main_icon_text: {
+      position: 'absolute',
+      width: 217,
+      height: 54,
+      alignSelf: 'center',
+      top: 250,  
+
   },
-  registration:{
-    marginTop: 40,
-    paddingRight: 90,
-    color: "rgba(207, 77, 79, 0.5)",
-    textDecorationLine: 'underline',
-    fontSize: 12,
+
+  main_header: {
+      position: 'absolute',
+      width: 331,
+      height: 331,
   },
+
+  registr: {
+      backgroundColor: 'transeparent',
+      width: 200,
+      height: 50,
+      marginVertical: 5,
+      alignItems: "center",
+      left: -80,
+      top: 30
+      
+  },
+
+  text_registr: {
+      fontFamily: 'OpenSans-Italic',
+      color: COLORS.text,
+      fontSize: 16,
+      textDecorationLine: 'underline'
+  }
+  
 })

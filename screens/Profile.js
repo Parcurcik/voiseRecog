@@ -1,14 +1,16 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
+import { useAuth } from '../AuthContext'
 
-const HomeScreen = () => {
+const Profile = () => {
+  const [user] = useAuth()
   return (
     <View>
-      <Text>Home Screen</Text>
+      <Text>{user.displayName}</Text>
     </View>
   )
 }
 
-export default HomeScreen
+export default Profile
 
 const styles = StyleSheet.create({})
