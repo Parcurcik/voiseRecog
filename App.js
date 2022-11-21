@@ -8,26 +8,13 @@ import RegistrationScreen from './screens/RegistrationScreen';
 import AuthProvider, { useAuth } from './AuthContext';
 import { useFonts } from 'expo-font';
 import { useCallback } from 'react';
+import { useContext } from 'react';
 
 
 
 const Stack = createNativeStackNavigator();
 
 const Navigator = () => {
-  const [fontsLoaded] = useFonts({
-    'OpenSans-Italic': require('./assets/fonts/OpenSans-Italic.ttf'),
-    'OpenSans-Medium': require('./assets/fonts/OpenSans-Medium.ttf'),
-  });
-
-  const onLayoutRootView = useCallback(async () => {
-    if (fontsLoaded) {
-      await SplashScreen.hideAsync();
-    }
-  }, [fontsLoaded]);
-
-  if (!fontsLoaded) {
-    return null;
-  }
 
   const [user] = useAuth()
 
@@ -56,6 +43,23 @@ const Navigator = () => {
 
 
 export default function App() {
+
+  const [fontsLoaded] = useFonts({
+    'OpenSans-Italic': require('./assets/fonts/OpenSans-Italic.ttf'),
+    'OpenSans-Medium': require('./assets/fonts/OpenSans-Medium.ttf'),
+    'OpenSans': require('./assets/fonts/OpenSans-Regular.ttf'),
+  });
+
+  const onLayoutRootView = useCallback(async () => {
+    if (fontsLoaded) {
+      await SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded]);
+
+  if (!fontsLoaded) {
+    return null;
+  }
+  
   return (
     <NavigationContainer>
       <AuthProvider>
