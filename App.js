@@ -6,12 +6,28 @@ import LoginScreen from './screens/LoginScreen';
 import Profile from './screens/Profile';
 import RegistrationScreen from './screens/RegistrationScreen';
 import AuthProvider, { useAuth } from './AuthContext';
+import { useFonts } from 'expo-font';
+import { useCallback } from 'react';
 
 
 
 const Stack = createNativeStackNavigator();
 
 const Navigator = () => {
+  const [fontsLoaded] = useFonts({
+    'OpenSans-Italic': require('./assets/fonts/OpenSans-Italic.ttf'),
+    'OpenSans-Medium': require('./assets/fonts/OpenSans-Medium.ttf'),
+  });
+
+  const onLayoutRootView = useCallback(async () => {
+    if (fontsLoaded) {
+      await SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded]);
+
+  if (!fontsLoaded) {
+    return null;
+  }
 
   const [user] = useAuth()
 
