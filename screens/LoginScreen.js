@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
   },
 
   text_registr: {
-      fontFamily: 'OpenSans-Italic',
+      // fontFamily: 'OpenSans-Italic',
       color: COLORS.text,
       fontSize: 16,
       textDecorationLine: 'underline'

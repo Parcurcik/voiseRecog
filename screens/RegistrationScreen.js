@@ -31,7 +31,11 @@ export default function RegistrationScreen() {
 
  
   const hanldeRegister = () => {
-    setIsLoading(true)
+    if (password  !== confirmPassword){
+      alert("Пароли не совпадают!")
+    }
+    else{
+      setIsLoading(true)
     axios({
       method: 'POST',
       url: 'https://identitytoolkit.googleapis.com/v1/accounts:signUp',
@@ -67,6 +71,9 @@ export default function RegistrationScreen() {
         console.log(res.data)
       })
       .catch((error) => console.log(error.response.request._response))
+
+    }
+    
   }
 
   return (
@@ -109,12 +116,14 @@ export default function RegistrationScreen() {
 
                 <CustomInput 
                     placeholder="Пароль"
+                    value={password}
+                    setValue={setPassword}
                     margin={10}
                     secureTextEntry={true}/>
                 <CustomInput 
                     placeholder="Повторите пароль"
-                    value={password}
-                    setValue={setPassword}
+                    value={confirmPassword}
+                    setValue={setConfirmPassword}
                     margin={10}
                     secureTextEntry={true}
                     flex={1}/>
