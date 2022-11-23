@@ -1,10 +1,8 @@
-import { Button, StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import { useAuth } from '../AuthContext'
-import CustomButton from './CustomButton';
-import { useNavigation } from '@react-navigation/native'
 
-const Profile = () => {
+const Result = () => {
   const [user] = useAuth()
   return (
     <View>
@@ -13,6 +11,6 @@ const Profile = () => {
   )
 }
 
-export default Profile
+export default Result
 
 const styles = StyleSheet.create({})

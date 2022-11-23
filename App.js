@@ -9,6 +9,8 @@ import AuthProvider, { useAuth } from './AuthContext';
 import { useFonts } from 'expo-font';
 import { useCallback } from 'react';
 import { useContext } from 'react';
+import NavigationBar from './screens/NavigationBar';
+
 
 
 
@@ -30,14 +32,8 @@ const Navigator = () => {
     )
   }
 
-  return (
-    <Stack.Navigator
-      screenOptions={{
-        
-      }}>
-        <Stack.Screen name="Profile" component={Profile} />
-      </Stack.Navigator>
-
+  return (   
+    <NavigationBar/>
   )
 }
 
