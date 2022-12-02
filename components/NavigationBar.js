@@ -3,7 +3,9 @@ import { ImageBackground, StyleSheet, View, Image } from "react-native";
 import Profile from "./Profile";
 import Train from "./Train";
 import Statistics from "./Statistics";
+import Result from "./Result";
 import { COLORS } from "../assets/colors/colors";
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 
 const Tab = createBottomTabNavigator()
@@ -20,10 +22,8 @@ export default NavigationBar = () => {
                     backgroundColor: 'transparent',
                     elevation: 0,
                 },
-                tabBarLabelStyle: {color: '#000000'}
-            }}
-            tabBarOptions={{
-                showLabel: false,
+                tabBarLabelStyle: {color: '#000000'},
+                tabBarShowLabel: false,
             }}>
                 <Tab.Screen name="Train" component={Train} options={{
                     tabBarIcon: ({focused}) => (
@@ -38,6 +38,11 @@ export default NavigationBar = () => {
                         </View>
                     ),
                 }}/>
+                
+                <Tab.Screen name="Result" component={Result} options={{
+                tabBarButton: () => null,
+                tabBarStyle: { display: "none" }}}/>
+
                 <Tab.Screen name="Statistics" component={Statistics} options={{
                     tabBarIcon: ({focused}) => (
                         <View>

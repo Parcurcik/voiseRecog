@@ -8,6 +8,9 @@ import Registration from './components/Registration';
 import Profile from './components/Profile';
 import NavigationBar from './components/NavigationBar';
 import AuthProvider, { useAuth } from './AuthContext';
+import { LogBox } from 'react-native';
+LogBox.ignoreLogs(['new NativeEventEmitter']); // Ignore log notification by message
+LogBox.ignoreAllLogs(); //Ignore all log notifications
 
 
 const Stack = createNativeStackNavigator();

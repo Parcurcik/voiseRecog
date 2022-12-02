@@ -7,18 +7,27 @@ import Train_word_2 from '../assets/images/Train_word_2.svg'
 import Voice from '@react-native-voice/voice';
 import { useState} from 'react';
 import { useEffect } from 'react';
+import { useNavigation } from '@react-navigation/native';
+import KeyboardAvoidingView from 'react-native/Libraries/Components/Keyboard/KeyboardAvoidingView';
 
 const Train = () => {
   const [user] = useAuth()
   let [started, setStarted] = useState(false);
   let [results, setResults] = useState([]);
+  const [voiceData, setVoiceData] = useState([]);
+  const navigation = useNavigation()
+  const toResult = () => {
+    navigation.navigate('Result')
 
+}
   useEffect(() => {
     Voice.onSpeechError = onSpeechError;
     Voice.onSpeechResults = onSpeechResults;
-
+    Voice.onSpeechVolumeChanged = onSpeechVolumeChanged;
+    Voice.onSpeechStart = onSpeechStart;
     return () => {
       Voice.destroy().then(Voice.removeAllListeners);
+      
     }
   }, []);
 
@@ -27,13 +36,34 @@ const Train = () => {
     setStarted(true);
   };
 
+  const onSpeechVolumeChanged = (e) => {
+    voiceData.push(e.value); 
+  }
+  const onSpeechStart = (e) => {
+    // flush the data array
+    voiceData.splice(0, voiceData.length);
+
+}
+
   const stopSpeechToText = async () => {
     await Voice.stop();
     setStarted(false);
   };
 
   const onSpeechResults = (result) => {
-    setResults(result.value);
+    var allValue = result.value
+    var theBestOption = allValue[Object.keys(allValue).pop()]
+    setResults(theBestOption)
+    console.log(theBestOption)
+    let sum = 0;
+    let count = 0;
+    for (let i = 0; i < voiceData.length; i++) {
+        sum += voiceData[i];
+        count++;
+    }
+    let average = sum / count;
+    console.log(average)
+    console.log(voiceData)
   };
 
   const onSpeechError = (error) => {
@@ -50,14 +80,21 @@ const Train = () => {
         <View style={styles.main_cont}>
             <Train_word marginBottom={34}/>
             <Train_word_2 marginBottom={55}/>
-            {results.map((result, index) => <Text key={index}>{result}</Text>)}
-            <Pressable marginBottom={180} onPress={startSpeechToText}>
+            {!started ? <Pressable marginBottom={180}  onPress={startSpeechToText}>
                 <Image
                     source={require('../assets/images/Start_img.png')}
                     style={styles.start_img}>
                 </Image>
-            </Pressable>
-            <Pressable style={styles.result}>
+            </Pressable> : undefined}
+            {started ? <Pressable marginBottom={180}  onPress={stopSpeechToText}>
+                <Image
+                    source={require('../assets/images/Start_img.png')}
+                    style={styles.start_img}>
+                </Image>
+            </Pressable> : undefined}
+             <Text style={styles.textWithSpaceStyle}>
+          </Text>
+            <Pressable style={styles.result} onPress={toResult}>
                 <Text style={styles.text_result}>Получить результат</Text>
             </Pressable>
         </View>
