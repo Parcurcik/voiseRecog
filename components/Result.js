@@ -10,13 +10,42 @@ import CustomButton from './CustomButton';
 import QuitBtn from '../assets/images/quit_btn.svg'
 import ResultText from '../assets/images/Result_text.svg'
 import ColoredText from './ColoredText'
-
+import { useRoute } from '@react-navigation/native';
 
 export default Result = () => {
+  
   const [user] = useAuth()
   const navigation = useNavigation()
+  const route = useRoute();
+  const newAverage = route.params.average
+  const newTime = route.params.timeToExport
+  const newCountWords = route.params.wordsInText
   const toTrain = () => {
     navigation.navigate('Train')
+  }
+
+  const findWordsPerMinute = (numWords, time) => {
+    timeToMinutes = time / 1000 / 60
+    return Math.floor(numWords / timeToMinutes)
+  }
+  
+  const wordsPerMinute = findWordsPerMinute(newCountWords, newTime)
+
+  const findWord = (num) => {
+    
+    let ruble = num % 10;
+    let tensOfRubles = num % 100;
+    if ((ruble == 1) && (tensOfRubles != 11)) return "слово/мин";
+    if ((ruble > 1) && (ruble < 5) && (tensOfRubles !=12) && (tensOfRubles !=13)&& (tensOfRubles !=14))
+      return "слова/мин";
+    return "слов/мин";
+  
+  }
+  constWordsPerMinuteText = findWordsPerMinute(newCountWords, newTime)
+  const findTembr = (newAverage) => {
+    if (newAverage <=5) return 'Вы говорите \n тихо'
+    else if (newAverage >= 8) return 'Вы \n говорите громко'
+    else return 'Вы говорите \n нужным тембром'
   }
   return (
     <View style={styles.container}>
@@ -39,8 +68,14 @@ export default Result = () => {
             Скорость речи
         </Text>
         <Text style={styles.tembr}>
-            Тембр голоса
+            Тембр голоса     
         </Text>
+      </View>
+      <View style={styles.tembr_params}>
+              <Text  style={(newAverage <=5 ) || (newAverage >= 8) ? styles.yellow_tembr : styles.green_tembr}>{findTembr(newAverage)}</Text>
+      </View>
+      <View style={styles.words_params}>
+              <Text  style={(wordsPerMinute <=119 ) || (wordsPerMinute >= 200) ? styles.yellow_wpm : styles.green_wpm}>{wordsPerMinute + " " +findWord(wordsPerMinute)}</Text>
       </View>
       <View style={styles.wrongWordsCont}>
         <Text style={styles.wrongWords}>
@@ -69,6 +104,49 @@ const styles = StyleSheet.create({
       height: 100,
       paddingTop: 50
   },
+  yellow_wpm: {
+    color: '#FF7500',
+    textAlign: "center",
+    fontSize: 14,
+    fontFamily: "OpenSans-BoldItalic",
+    paddingRight: 230,
+  },
+
+  words_params: {
+    marginTop: -36,
+    alignSelf: "flex-end",
+    justifyContent: 'center',
+  },
+  green_wpm: {
+    color: '#0BAB00', 
+    textAlign: "center",
+    paddingRight: 230,
+    fontSize: 14,
+    paddingTop: -50,
+    fontFamily: "OpenSans-BoldItalic",
+  },
+
+  tembr_params: {
+    paddingTop: 5,
+    alignSelf: "flex-end",
+  },
+
+  green_tembr: {
+    color: '#0BAB00', 
+    textAlign: "center",
+    paddingRight: 40,
+    fontSize: 14,
+    fontFamily: "OpenSans-BoldItalic",
+  },
+
+  yellow_tembr: {
+    color: '#FF7500',
+    textAlign: "center",
+    fontSize: 14,
+    fontFamily: "OpenSans-BoldItalic",
+    paddingRight: 53,
+  },
+
 
   container: {
       flex: 1,
@@ -132,7 +210,7 @@ const styles = StyleSheet.create({
 
   wrongWordsCont: {
     backgroundColor: 'transeparent',
-    top: 65
+    top: 30
   },
 
   result: {

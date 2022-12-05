@@ -10,16 +10,28 @@ import { useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import KeyboardAvoidingView from 'react-native/Libraries/Components/Keyboard/KeyboardAvoidingView';
 
+
 const Train = () => {
   const [user] = useAuth()
   let [started, setStarted] = useState(false);
   let [results, setResults] = useState([]);
-  const [voiceData, setVoiceData] = useState([]);
-  const navigation = useNavigation()
-  const toResult = () => {
-    navigation.navigate('Result')
 
+  const [voiceData, setVoiceData] = useState([]);
+  const [average, setAvverage] = useState('')
+
+  const navigation = useNavigation()
+
+  const [startTime, setStartTime] = useState('')
+  const [stopTime, setStopTime] = useState('')
+  const [timeToExport, setTimeToExport] = useState('')
+  const [wordsInText, setWordsIntext] = useState('')
+
+  const toResult = () => {
+    navigation.navigate('Result',  {average, timeToExport, wordsInText})
 }
+  
+
+
   useEffect(() => {
     Voice.onSpeechError = onSpeechError;
     Voice.onSpeechResults = onSpeechResults;
@@ -34,27 +46,36 @@ const Train = () => {
   const startSpeechToText = async () => {
     await Voice.start("ru");
     setStarted(true);
+    newStart = (new Date()).getTime();
+    setStartTime(newStart)
   };
 
   const onSpeechVolumeChanged = (e) => {
     voiceData.push(e.value); 
   }
   const onSpeechStart = (e) => {
-    // flush the data array
     voiceData.splice(0, voiceData.length);
-
 }
 
   const stopSpeechToText = async () => {
     await Voice.stop();
     setStarted(false);
+    newStop = (new Date()).getTime();
+    setStopTime(newStop)
+    setStartTime(newStart)
+    let timeToExport = newStop - startTime
+    setTimeToExport(timeToExport)
+    console.log('Время работы', timeToExport)
   };
 
   const onSpeechResults = (result) => {
     var allValue = result.value
     var theBestOption = allValue[Object.keys(allValue).pop()]
     setResults(theBestOption)
-    console.log(theBestOption)
+    console.log('Распозавание:', theBestOption)
+    let wordsInText = setNumWordsInText(theBestOption)
+    setWordsIntext(wordsInText)
+    console.log('Количество слов: ', wordsInText)
     let sum = 0;
     let count = 0;
     for (let i = 0; i < voiceData.length; i++) {
@@ -62,13 +83,23 @@ const Train = () => {
         count++;
     }
     let average = sum / count;
-    console.log(average)
-    console.log(voiceData)
+    setAvverage(average)
+    console.log('Среднее значение громкости:', average)
+    // console.log('Частоты', voiceData)
   };
 
   const onSpeechError = (error) => {
     console.log(error);
   };
+
+  const setNumWordsInText = b => {
+    let s = b
+    s = s.replace(/(^\s*)|(\s*$)/gi, "")
+    s = s.replace(/[ ]{2,}/gi, " ")
+    s = s.replace(/\n /, "\n")
+    return s.split(" ").length
+  }
+  
   return (
     <View style={styles.container}>
         <View style={styles.header}>
