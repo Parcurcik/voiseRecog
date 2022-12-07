@@ -14,15 +14,51 @@ import { useRoute } from '@react-navigation/native';
 
 export default Result = () => {
   
+  const listOfBadWords = ['типа','ну','короче','кстати','скажем','блин',
+  'реально','ведь', 'вообще', 'прикинь', 'достаточно', 'знаешь', 'так', 'собственно', 'допустим',
+  'вероятно', 'просто', 'конкретно', 'ладно', 'походу']
+
   const [user] = useAuth()
   const navigation = useNavigation()
   const route = useRoute();
   const newAverage = route.params.average
   const newTime = route.params.timeToExport
   const newCountWords = route.params.wordsInText
+  const textWords = route.params.results
+  console.log('From result:', textWords)
+
+  const counterObject = listOfBadWords.reduce((acc, curr) => {
+    acc[curr] = 0;
+    return acc;
+  }, {});
+  
+  textWords.split(/[\s,\.]/).forEach(
+    token => {
+      if (token in counterObject) counterObject[token]++;
+    }
+  );
+  
+  const topWords = Object.entries(counterObject).sort((a, b) => b[1] - a[1]).slice(0, 8);
+
+  console.log(topWords)
+
+  var filteredArr = topWords.filter(function(item) {
+    return item[1] != 0;
+  });
+
+  console.log(filteredArr)
+
+  var output = filteredArr.map(function(item) {
+    return item[0] + Array(70).fill(' ').join('') + item[1];
+  }).join("\n ");
+ 
+ console.log(output); 
+
+
   const toTrain = () => {
     navigation.navigate('Train')
   }
+  
 
   const findWordsPerMinute = (numWords, time) => {
     timeToMinutes = time / 1000 / 60
@@ -33,15 +69,16 @@ export default Result = () => {
 
   const findWord = (num) => {
     
-    let ruble = num % 10;
-    let tensOfRubles = num % 100;
-    if ((ruble == 1) && (tensOfRubles != 11)) return "слово/мин";
-    if ((ruble > 1) && (ruble < 5) && (tensOfRubles !=12) && (tensOfRubles !=13)&& (tensOfRubles !=14))
+    let word = num % 10;
+    let tensOfWords = num % 100;
+    if ((word == 1) && (tensOfWords != 11)) return "слово/мин";
+    if ((word > 1) && (word < 5) && (tensOfWords !=12) && (tensOfWords !=13)&& (tensOfWords !=14))
       return "слова/мин";
     return "слов/мин";
   
   }
   constWordsPerMinuteText = findWordsPerMinute(newCountWords, newTime)
+
   const findTembr = (newAverage) => {
     if (newAverage <=5) return 'Вы говорите \n тихо'
     else if (newAverage >= 8) return 'Вы \n говорите громко'
@@ -81,15 +118,14 @@ export default Result = () => {
         <Text style={styles.wrongWords}>
             Употребление слов паразитов
         </Text>
-      </View>
-      <View>
+        <Text>{output}</Text>
       </View>
       <View style={styles.result}>
         <Text style={styles.uLevel}>
             Ваш уровень
         </Text>
         <ColoredText text='Преподаватель УрФУ!' color="#FF8A00" fontSize={19}/>
-        <CustomButton text="1"/>
+        <CustomButton text="Начать заново" onPress={toTrain}/>
       </View>
     </View>
 )

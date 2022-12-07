@@ -27,7 +27,7 @@ const Train = () => {
   const [wordsInText, setWordsIntext] = useState('')
 
   const toResult = () => {
-    navigation.navigate('Result',  {average, timeToExport, wordsInText})
+    navigation.navigate('Result',  {average, timeToExport, wordsInText, results})
 }
   
 
@@ -71,7 +71,7 @@ const Train = () => {
   const onSpeechResults = (result) => {
     var allValue = result.value
     var theBestOption = allValue[Object.keys(allValue).pop()]
-    setResults(theBestOption)
+    setResults(theBestOption.toLowerCase())
     console.log('Распозавание:', theBestOption)
     let wordsInText = setNumWordsInText(theBestOption)
     setWordsIntext(wordsInText)
