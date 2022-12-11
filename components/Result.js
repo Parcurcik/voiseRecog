@@ -11,8 +11,23 @@ import QuitBtn from '../assets/images/quit_btn.svg'
 import ResultText from '../assets/images/Result_text.svg'
 import ColoredText from './ColoredText'
 import { useRoute } from '@react-navigation/native';
+import CustomOutput from './CustomOutput'
 
 export default Result = () => {
+
+  const ParasiteWords = () => {
+    var parasiteArr = []
+    for (let i = 0; i < output.length && i < 7; i++)
+      parasiteArr.push(
+      <View key={i}>
+      <CustomOutput output={output[i][0]} outputCount={output[i][1]}/>
+      </View>
+      )
+    return (<View>
+      {parasiteArr}
+      </View>
+      )
+  }
   
   const listOfBadWords = ['типа','ну','короче','кстати','скажем','блин',
   'реально','ведь', 'вообще', 'прикинь', 'достаточно', 'знаешь', 'так', 'собственно', 'допустим',
@@ -49,11 +64,10 @@ export default Result = () => {
   console.log(filteredArr)
 
   var output = filteredArr.map(function(item) {
-    return item[0] + Array(70).fill(' ').join('') + item[1];
-  }).join("\n ");
+    return [item[0], item[1]]
+  });
  
- console.log(output); 
-
+ console.log('Массив:', output); 
 
   const toTrain = () => {
     navigation.navigate('Train')
@@ -65,7 +79,29 @@ export default Result = () => {
     return Math.floor(numWords / timeToMinutes)
   }
   
+
   const wordsPerMinute = findWordsPerMinute(newCountWords, newTime)
+
+  const makeRecomendations = (wordsPerMinute, newAverage) => {
+    console.log(output.length)
+    if (wordsPerMinute  <= 119 && (newAverage >=5 && newAverage <=8) && output.length < 1) return 'Увеличьте скорость речи'
+    else if (wordsPerMinute  <= 119 && newAverage <=5 && output.length < 1) return 'Увеличьте скорость речи\nГоворите громче'
+    else if (wordsPerMinute  <= 119 && newAverage >=8 && output.length < 1) return 'Увеличьте скорость речи\nГоворите тише'
+    else if (wordsPerMinute  <= 119 && (newAverage >=8) && output.length >= 1) return 'Увеличьте скорость речи\nГоворите тише\nКонтролируйте употребление слов паразитов'
+    else if (wordsPerMinute  <= 119 && (newAverage <=5) && output.length >= 1) return 'Увеличьте скорость речи\nГоворите громче\nКонтролируйте употребление слов паразитов'
+    else if (wordsPerMinute  <= 119 && (newAverage >=5 && newAverage <=8) && output.length >= 1) return 'Увеличьте скорость речи\nКонтролируйте употребление слов паразитов'
+    else if (wordsPerMinute  >= 180 && (newAverage >=5 && newAverage <=8) && output.length < 1) return 'Не торопитесь во время доклада'
+    else if ((wordsPerMinute >= 119 && wordsPerMinute <= 180)  && newAverage <=5 && output.length < 1) return 'Говорите громче'
+    else if ((wordsPerMinute >= 119 && wordsPerMinute <= 180)  && newAverage >=8 && output.length < 1) return 'Говорите тише'
+    else if ((wordsPerMinute >= 119 && wordsPerMinute <= 180)  && (newAverage >=5 && newAverage <= 8) && output.length >= 1) return 'Контролируйте употребление слов паразитов'
+    else if ((wordsPerMinute >= 119 && wordsPerMinute <= 180)  && newAverage <=5 &&  output.length >= 1) return 'Говорите громче\nКонтролируйте употребление слов паразитов'
+    else if (wordsPerMinute >=180  && newAverage <=5 &&  output.length >= 1) return 'Не торопитесь во время доклада\nГоворите громче\nКонтролируйте употребление слов паразитов'
+    else if (wordsPerMinute >=180  && (newAverage >=5 && newAverage <= 8) &&  output.length < 1) return 'Не торопитесь во время доклада'
+    else if (wordsPerMinute >=180  && (newAverage >=5 && newAverage <= 8) &&  output.length >= 1) return 'Не торопитесь во время доклада\nКонтролируйте употребление слов паразитов'
+    else if (wordsPerMinute <= 119  && (newAverage >=5 && newAverage <= 8) &&  output.length >= 1) return 'Увеличьте скорость речи'
+    else return "Вы потрясающий спикер!"
+
+  }
 
   const findWord = (num) => {
     
@@ -108,24 +144,22 @@ export default Result = () => {
             Тембр голоса     
         </Text>
       </View>
-      <View style={styles.tembr_params}>
-              <Text  style={(newAverage <=5 ) || (newAverage >= 8) ? styles.yellow_tembr : styles.green_tembr}>{findTembr(newAverage)}</Text>
-      </View>
-      <View style={styles.words_params}>
-              <Text  style={(wordsPerMinute <=119 ) || (wordsPerMinute >= 200) ? styles.yellow_wpm : styles.green_wpm}>{wordsPerMinute + " " +findWord(wordsPerMinute)}</Text>
+      <View style={styles.paramsCont}>
+        <Text style={(wordsPerMinute <=119 ) || (wordsPerMinute >= 180) ? styles.yellow_wpm : styles.green_wpm}>{wordsPerMinute + " " +findWord(wordsPerMinute)}</Text>
+        <Text style={(newAverage <=5 ) || (newAverage >= 8) ? styles.yellow_tembr : styles.green_tembr}>{findTembr(newAverage)}</Text>
       </View>
       <View style={styles.wrongWordsCont}>
         <Text style={styles.wrongWords}>
             Употребление слов паразитов
         </Text>
-        <Text>{output}</Text>
+        <ParasiteWords/>
       </View>
       <View style={styles.result}>
         <Text style={styles.uLevel}>
-            Ваш уровень
+            Рекомендации
         </Text>
-        <ColoredText text='Преподаватель УрФУ!' color="#FF8A00" fontSize={19}/>
-        <CustomButton text="Начать заново" onPress={toTrain}/>
+        <Text style={((newAverage >=5 ) && (newAverage <= 8) && (wordsPerMinute >=119 && wordsPerMinute <=180) && output.length < 1) ? styles.goodSpeaker : styles.textRecomendations}>{makeRecomendations(wordsPerMinute, newAverage)}</Text>
+        <CustomButton text="Начать заново" onPress={toTrain} margin={-5}/>
       </View>
     </View>
 )
@@ -140,47 +174,58 @@ const styles = StyleSheet.create({
       height: 100,
       paddingTop: 50
   },
+
+  goodSpeaker: {
+    color: '#0BAB00',
+    fontSize: 18,
+    fontFamily: 'OpenSans-BoldItalic',
+    paddingBottom: 10,
+    textAlign: "center",
+  },
+
+
+  textRecomendations: {
+    color: 'red',
+    fontSize: 18,
+    fontFamily: 'OpenSans-BoldItalic',
+    paddingBottom: 10,
+    textAlign: "center",
+  },
+
   yellow_wpm: {
     color: '#FF7500',
     textAlign: "center",
-    fontSize: 14,
+    fontSize: 18,
+    position: 'absolute',
+    left: -135,
     fontFamily: "OpenSans-BoldItalic",
-    paddingRight: 230,
   },
 
-  words_params: {
-    marginTop: -36,
-    alignSelf: "flex-end",
-    justifyContent: 'center',
-  },
   green_wpm: {
     color: '#0BAB00', 
-    textAlign: "center",
-    paddingRight: 230,
-    fontSize: 14,
-    paddingTop: -50,
+    textAlign: 'center',
+    fontSize: 18,
+    left: -135,
+    position: 'absolute',
     fontFamily: "OpenSans-BoldItalic",
-  },
-
-  tembr_params: {
-    paddingTop: 5,
-    alignSelf: "flex-end",
   },
 
   green_tembr: {
     color: '#0BAB00', 
     textAlign: "center",
-    paddingRight: 40,
-    fontSize: 14,
+    fontSize: 18,
+    position: 'absolute',
+    left: 5,
     fontFamily: "OpenSans-BoldItalic",
   },
 
   yellow_tembr: {
     color: '#FF7500',
     textAlign: "center",
-    fontSize: 14,
+    fontSize: 18,
+    position: 'absolute',
+    left: 27,
     fontFamily: "OpenSans-BoldItalic",
-    paddingRight: 53,
   },
 
 
@@ -225,6 +270,12 @@ const styles = StyleSheet.create({
     paddingTop: 30
   },
 
+  paramsCont: {
+    backgroundColor: 'transeparent',
+    flexDirection: 'row',
+    paddingTop: 10
+  },
+
   speed: {
     color: 'rgba(207, 77, 79, 0.75)',
     fontSize: 21,
@@ -246,14 +297,15 @@ const styles = StyleSheet.create({
 
   wrongWordsCont: {
     backgroundColor: 'transeparent',
-    top: 30
+    top: 40
   },
 
   result: {
     backgroundColor: 'transeparent',
     flexDirection: 'column',
     alignItems:'center',
-    top: 415
+    top: 620,
+    position: 'absolute'
   },
 
   uLevel: {
@@ -261,5 +313,11 @@ const styles = StyleSheet.create({
     fontSize: 21,
     fontFamily: 'OpenSans',
     paddingBottom: 10
+  },
+
+  imgBgWW: {
+    width: 292,
+    height: 42,
+    top: 150,
   }
 })
