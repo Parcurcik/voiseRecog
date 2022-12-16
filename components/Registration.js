@@ -11,11 +11,15 @@ import QuitBtn from '../assets/images/quit_btn.svg'
 import RegWord from '../assets/images/Reg_word.svg'
 
 
+
+
+
 export default function Registration() {
   const navigation = useNavigation()
   const toLogin = () => {
     navigation.navigate('Authorization')
   }
+
 
 
   const [surname, setSurname] = useState('')
@@ -29,6 +33,7 @@ export default function Registration() {
 
   const [_, setUser] = useAuth()
 
+ 
  
   const hanldeRegister = () => {
     if (password  !== confirmPassword){
@@ -71,7 +76,7 @@ export default function Registration() {
         console.log(res.data)
       })
       .catch((error) => console.log(error.response.request._response))
-
+      
     }
     
   }
@@ -111,7 +116,7 @@ export default function Registration() {
                 <CustomInput
                     value={email}
                     setValue={setEmail} 
-                    placeholder="Логин"
+                    placeholder="Почта"
                     margin={10}/>
 
                 <CustomInput 

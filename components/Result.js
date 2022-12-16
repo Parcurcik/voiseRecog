@@ -31,7 +31,7 @@ export default Result = () => {
   
   const listOfBadWords = ['типа','ну','короче','кстати','скажем','блин',
   'реально','ведь', 'вообще', 'прикинь', 'достаточно', 'знаешь', 'так', 'собственно', 'допустим',
-  'вероятно', 'просто', 'конкретно', 'ладно', 'походу']
+  'вероятно', 'просто', 'конкретно', 'ладно', 'походу', 'фактически', 'получается']
 
   const [user] = useAuth()
   const navigation = useNavigation()
@@ -40,13 +40,14 @@ export default Result = () => {
   const newTime = route.params.timeToExport
   const newCountWords = route.params.wordsInText
   const textWords = route.params.results
-  console.log('From result:', textWords)
+  
 
   const counterObject = listOfBadWords.reduce((acc, curr) => {
     acc[curr] = 0;
     return acc;
   }, {});
   
+
   textWords.split(/[\s,\.]/).forEach(
     token => {
       if (token in counterObject) counterObject[token]++;
@@ -55,13 +56,11 @@ export default Result = () => {
   
   const topWords = Object.entries(counterObject).sort((a, b) => b[1] - a[1]).slice(0, 8);
 
-  console.log(topWords)
 
   var filteredArr = topWords.filter(function(item) {
     return item[1] != 0;
   });
 
-  console.log(filteredArr)
 
   var output = filteredArr.map(function(item) {
     return [item[0], item[1]]
@@ -83,25 +82,16 @@ export default Result = () => {
   const wordsPerMinute = findWordsPerMinute(newCountWords, newTime)
 
   const makeRecomendations = (wordsPerMinute, newAverage) => {
-    console.log(output.length)
-    if (wordsPerMinute  <= 119 && (newAverage >=5 && newAverage <=8) && output.length < 1) return 'Увеличьте скорость речи'
-    else if (wordsPerMinute  <= 119 && newAverage <=5 && output.length < 1) return 'Увеличьте скорость речи\nГоворите громче'
-    else if (wordsPerMinute  <= 119 && newAverage >=8 && output.length < 1) return 'Увеличьте скорость речи\nГоворите тише'
-    else if (wordsPerMinute  <= 119 && (newAverage >=8) && output.length >= 1) return 'Увеличьте скорость речи\nГоворите тише\nКонтролируйте употребление слов паразитов'
-    else if (wordsPerMinute  <= 119 && (newAverage <=5) && output.length >= 1) return 'Увеличьте скорость речи\nГоворите громче\nКонтролируйте употребление слов паразитов'
-    else if (wordsPerMinute  <= 119 && (newAverage >=5 && newAverage <=8) && output.length >= 1) return 'Увеличьте скорость речи\nКонтролируйте употребление слов паразитов'
-    else if (wordsPerMinute  >= 180 && (newAverage >=5 && newAverage <=8) && output.length < 1) return 'Не торопитесь во время доклада'
-    else if ((wordsPerMinute >= 119 && wordsPerMinute <= 180)  && newAverage <=5 && output.length < 1) return 'Говорите громче'
-    else if ((wordsPerMinute >= 119 && wordsPerMinute <= 180)  && newAverage >=8 && output.length < 1) return 'Говорите тише'
-    else if ((wordsPerMinute >= 119 && wordsPerMinute <= 180)  && (newAverage >=5 && newAverage <= 8) && output.length >= 1) return 'Контролируйте употребление слов паразитов'
-    else if ((wordsPerMinute >= 119 && wordsPerMinute <= 180)  && newAverage <=5 &&  output.length >= 1) return 'Говорите громче\nКонтролируйте употребление слов паразитов'
-    else if (wordsPerMinute >=180  && newAverage <=5 &&  output.length >= 1) return 'Не торопитесь во время доклада\nГоворите громче\nКонтролируйте употребление слов паразитов'
-    else if (wordsPerMinute >=180  && (newAverage >=5 && newAverage <= 8) &&  output.length < 1) return 'Не торопитесь во время доклада'
-    else if (wordsPerMinute >=180  && (newAverage >=5 && newAverage <= 8) &&  output.length >= 1) return 'Не торопитесь во время доклада\nКонтролируйте употребление слов паразитов'
-    else if (wordsPerMinute <= 119  && (newAverage >=5 && newAverage <= 8) &&  output.length >= 1) return 'Увеличьте скорость речи'
-    else return "Вы потрясающий спикер!"
-
+    const a = []
+    if (wordsPerMinute <= 119) a.push('Вам необходимо увеличить количество слов в минуту до 120.')
+    if (wordsPerMinute >= 180) a.push('Вам необходимо уменьшить количество слов в минуту до 170.')
+    if (newAverage <= 5) a.push('Говорите громче.')
+    if (newAverage >= 8) a.push('Говорите тише.')
+    if (output.length) a.push('Постарайтесь уменьшить количество слов-паразитов.')
+    if (a.length ) return a.join('\n')
+    return 'Вы потрясающий спикер!'
   }
+
 
   const findWord = (num) => {
     
@@ -159,7 +149,6 @@ export default Result = () => {
             Рекомендации
         </Text>
         <Text style={((newAverage >=5 ) && (newAverage <= 8) && (wordsPerMinute >=119 && wordsPerMinute <=180) && output.length < 1) ? styles.goodSpeaker : styles.textRecomendations}>{makeRecomendations(wordsPerMinute, newAverage)}</Text>
-        <CustomButton text="Начать заново" onPress={toTrain} margin={-5}/>
       </View>
     </View>
 )

@@ -9,12 +9,14 @@ import { useState} from 'react';
 import { useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import KeyboardAvoidingView from 'react-native/Libraries/Components/Keyboard/KeyboardAvoidingView';
+import { startDetecting } from 'react-native/Libraries/Utilities/PixelRatio';
 
 
 const Train = () => {
   const [user] = useAuth()
   let [started, setStarted] = useState(false);
   let [results, setResults] = useState([]);
+  let [startToResult, setStartToResult] = useState(false)
 
   const [voiceData, setVoiceData] = useState([]);
   const [average, setAvverage] = useState('')
@@ -63,12 +65,16 @@ const Train = () => {
     newStop = (new Date()).getTime();
     setStopTime(newStop)
     setStartTime(newStart)
+    setStartToResult(true)
+    console.log(startToResult)
     let timeToExport = newStop - startTime
     setTimeToExport(timeToExport)
     console.log('Время работы', timeToExport)
+    
   };
 
   const onSpeechResults = (result) => {
+    
     var allValue = result.value
     var theBestOption = allValue[Object.keys(allValue).pop()]
     setResults(theBestOption.toLowerCase())
@@ -86,10 +92,13 @@ const Train = () => {
     setAvverage(average)
     console.log('Среднее значение громкости:', average)
     // console.log('Частоты', voiceData)
+  
+    
   };
 
   const onSpeechError = (error) => {
     console.log(error);
+  
   };
 
   const setNumWordsInText = b => {
@@ -125,7 +134,7 @@ const Train = () => {
             </Pressable> : undefined}
              <Text style={styles.textWithSpaceStyle}>
           </Text>
-            <Pressable style={styles.result} onPress={toResult}>
+            <Pressable style={styles.result} onPress={toResult} disabled={!startToResult}>
                 <Text style={styles.text_result}>Получить результат</Text>
             </Pressable>
         </View>

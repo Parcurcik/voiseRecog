@@ -1,14 +1,18 @@
 import React from "react";
 import { View, Image, Text, TextInput, StyleSheet, ImageBackground, KeyboardAvoidingView } from "react-native";
 
-const CustomOutput = ({output, outputCount, margin}) => {
+const CustomOutputStat = ({output, outputCount, margin, image}) => {
     return (
         <View style={styles.container} marginVertical={margin}>
             <ImageBackground 
-                source={require('../assets/images/WrongWordsBg.png')}
+                source={require('../assets/images/CustomOutputStat.png')}
                 style={styles.img_bg}>
                 <Text style={styles.text}>{output}</Text>
-                <Text style={styles.textCount}>{outputCount}</Text>
+                <Text 
+                    style={styles.textCount}>{outputCount}</Text>
+                <Image
+                    source={image}
+                    style={styles.image}/>
             </ImageBackground>        
         </View>
     )
@@ -25,12 +29,12 @@ const styles = StyleSheet.create({
 
     img_bg: {
         width: 292,
-        height: 42
+        height: 32
     },
 
     text: {
         fontFamily: 'OpenSans-Italic',
-        fontSize: 16,
+        fontSize: 12,
         color: 'rgba(207, 77, 79, 1)',
         top: 7,
         paddingStart: 15
@@ -38,12 +42,20 @@ const styles = StyleSheet.create({
 
     textCount: {
         fontFamily: 'OpenSans-Italic',
-        fontSize: 16,
+        fontSize: 12,
         color: 'rgba(207, 77, 79, 1)',
         top: 7,
         position: 'absolute',
         paddingLeft: 270
+    },
+
+    image: {
+        width: 20,
+        height: 20,
+        position: 'absolute',
+        left: 264,
+        top: 6
     }
 })
 
-export default CustomOutput
+export default CustomOutputStat
