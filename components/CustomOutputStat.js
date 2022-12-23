@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Image, Text, TextInput, StyleSheet, ImageBackground, KeyboardAvoidingView } from "react-native";
 
-const CustomOutputStat = ({output, outputCount, margin, image}) => {
+const CustomOutputStat = ({output, outputCount, outputCount2, margin, image}) => {
     return (
         <View style={styles.container} marginVertical={margin}>
             <ImageBackground 
@@ -10,6 +10,8 @@ const CustomOutputStat = ({output, outputCount, margin, image}) => {
                 <Text style={styles.text}>{output}</Text>
                 <Text 
                     style={styles.textCount}>{outputCount}</Text>
+                <Text 
+                    style={styles.textCount2}>{outputCount2}</Text>
                 <Image
                     source={image}
                     style={styles.image}/>
@@ -47,6 +49,15 @@ const styles = StyleSheet.create({
         top: 7,
         position: 'absolute',
         paddingLeft: 270
+    },
+
+    textCount2: {
+        fontFamily: 'OpenSans-Italic',
+        fontSize: 12,
+        color: 'rgba(207, 77, 79, 1)',
+        top: 7,
+        position: 'absolute',
+        paddingLeft: 210
     },
 
     image: {

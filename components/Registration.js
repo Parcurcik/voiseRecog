@@ -9,7 +9,8 @@ import CustomInput from './CustomInput';
 import CustomButton from './CustomButton';
 import QuitBtn from '../assets/images/quit_btn.svg'
 import RegWord from '../assets/images/Reg_word.svg'
-
+import { db } from '../firebase-config.js';
+import { ref, set, update, onValue, remove } from "firebase/database";
 
 
 
@@ -19,7 +20,7 @@ export default function Registration() {
   const toLogin = () => {
     navigation.navigate('Authorization')
   }
-
+  
 
 
   const [surname, setSurname] = useState('')
@@ -32,6 +33,7 @@ export default function Registration() {
   const [error, setError] = useState('')
 
   const [_, setUser] = useAuth()
+
 
  
  
@@ -63,20 +65,31 @@ export default function Registration() {
             idToken: res.data.idToken,
             displayName: name + ' ' + surname
           }
-        }).then((r) => {
+        })
+        .then((r) => {
           setUser({...r.data, idToken: res.data.idToken})
+          set(ref(db, 'users/' + res.data.localId), {          
+            email: email,
+            countTrains: 0,
+            WordPerMinute: 0,
+            Tembr: 0,
+            ArrOfParasites: [],
+          }).then(() => {
+             console.log('Made new account');    
+        })  
+            .catch((error) => {
+                console.log(error);
+            });
         }).catch(e => {
-          console.log(e, 'updaate profile error');
+          console.log(e, 'Updating error');
           alert(e.message);
         })
         .finally(() => {
           setIsLoading(false);
         })
-
-        console.log(res.data)
       })
       .catch((error) => console.log(error.response.request._response))
-      
+
     }
     
   }

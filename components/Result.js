@@ -12,6 +12,8 @@ import ResultText from '../assets/images/Result_text.svg'
 import ColoredText from './ColoredText'
 import { useRoute } from '@react-navigation/native';
 import CustomOutput from './CustomOutput'
+import { db } from '../firebase-config.js';
+import { ref, set, update, onValue, remove } from "firebase/database";
 
 export default Result = () => {
 
@@ -29,6 +31,8 @@ export default Result = () => {
       )
   }
   
+  
+  
   const listOfBadWords = ['типа','ну','короче','кстати','скажем','блин',
   'реально','ведь', 'вообще', 'прикинь', 'достаточно', 'знаешь', 'так', 'собственно', 'допустим',
   'вероятно', 'просто', 'конкретно', 'ладно', 'походу', 'фактически', 'получается']
@@ -40,7 +44,15 @@ export default Result = () => {
   const newTime = route.params.timeToExport
   const newCountWords = route.params.wordsInText
   const textWords = route.params.results
+  const countTrain = route.params.counter
+  const wpmFromDataBase = route.params.wpmFromDb
+  const tembrFromDataBase = route.params.tembrFromDb
+  const fromBdAr = route.params.arrFromBd
+
   
+  console.log('Массив из БАЗЫ ДАННЫХ', fromBdAr)
+
+
 
   const counterObject = listOfBadWords.reduce((acc, curr) => {
     acc[curr] = 0;
@@ -69,7 +81,8 @@ export default Result = () => {
  console.log('Массив:', output); 
 
   const toTrain = () => {
-    navigation.navigate('Train')
+    navigation.navigate('Train', {wordsPerMinute})
+    
   }
   
 
@@ -78,14 +91,14 @@ export default Result = () => {
     return Math.floor(numWords / timeToMinutes)
   }
   
+ 
 
   const wordsPerMinute = findWordsPerMinute(newCountWords, newTime)
-
   const makeRecomendations = (wordsPerMinute, newAverage) => {
     const a = []
     if (wordsPerMinute <= 119) a.push('Вам необходимо увеличить количество слов в минуту до 120.')
     if (wordsPerMinute >= 180) a.push('Вам необходимо уменьшить количество слов в минуту до 170.')
-    if (newAverage <= 5) a.push('Говорите громче.')
+    if (newAverage <= 5.2) a.push('Говорите громче.')
     if (newAverage >= 8) a.push('Говорите тише.')
     if (output.length) a.push('Постарайтесь уменьшить количество слов-паразитов.')
     if (a.length ) return a.join('\n')
@@ -93,6 +106,25 @@ export default Result = () => {
   }
 
 
+
+    console.log('Из IFa fromBdAr:',fromBdAr)
+    console.log('Из IF output', output)
+    const combined = Object.entries([...fromBdAr, ...output].reduce((acc, [key, value]) => {     acc[key] = (acc[key] || 0) + value;     return acc; }, {}));
+    
+    console.log('Комбинированный', combined)
+
+
+  update(ref(db, 'users/' + user.localId), {       
+    countTrains: countTrain,
+    WordPerMinute: wpmFromDataBase + wordsPerMinute,
+    Tembr: tembrFromDataBase + newAverage,
+    ArrOfParasites: combined
+  }).then(() => {
+    console.log('Обновление бд');    
+})  
+    .catch((error) => {
+        alert(error);
+    });
   const findWord = (num) => {
     
     let word = num % 10;
@@ -106,16 +138,19 @@ export default Result = () => {
   constWordsPerMinuteText = findWordsPerMinute(newCountWords, newTime)
 
   const findTembr = (newAverage) => {
-    if (newAverage <=5) return 'Вы говорите \n тихо'
+    if (newAverage <=5.2) return 'Вы говорите \n тихо'
     else if (newAverage >= 8) return 'Вы \n говорите громко'
     else return 'Вы говорите \n нужным тембром'
   }
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
       <Pressable
             style={styles.quit_button_cont}
-            onPress={toTrain}>
+            onPress={() => {
+              toTrain();
+             }}>
                 <QuitBtn
                     style={[styles.quit_button]}
                     resizeMode='contain'/>
@@ -136,7 +171,7 @@ export default Result = () => {
       </View>
       <View style={styles.paramsCont}>
         <Text style={(wordsPerMinute <=119 ) || (wordsPerMinute >= 180) ? styles.yellow_wpm : styles.green_wpm}>{wordsPerMinute + " " +findWord(wordsPerMinute)}</Text>
-        <Text style={(newAverage <=5 ) || (newAverage >= 8) ? styles.yellow_tembr : styles.green_tembr}>{findTembr(newAverage)}</Text>
+        <Text style={(newAverage <=5.2 ) || (newAverage >= 8) ? styles.yellow_tembr : styles.green_tembr}>{findTembr(newAverage)}</Text>
       </View>
       <View style={styles.wrongWordsCont}>
         <Text style={styles.wrongWords}>
@@ -148,7 +183,7 @@ export default Result = () => {
         <Text style={styles.uLevel}>
             Рекомендации
         </Text>
-        <Text style={((newAverage >=5 ) && (newAverage <= 8) && (wordsPerMinute >=119 && wordsPerMinute <=180) && output.length < 1) ? styles.goodSpeaker : styles.textRecomendations}>{makeRecomendations(wordsPerMinute, newAverage)}</Text>
+        <Text style={((newAverage >=5.2 ) && (newAverage <= 8) && (wordsPerMinute > 119 && wordsPerMinute <=180) && output.length < 1) ? styles.goodSpeaker : styles.textRecomendations}>{makeRecomendations(wordsPerMinute, newAverage)}</Text>
       </View>
     </View>
 )

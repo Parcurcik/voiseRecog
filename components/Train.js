@@ -8,38 +8,61 @@ import Voice from '@react-native-voice/voice';
 import { useState} from 'react';
 import { useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import KeyboardAvoidingView from 'react-native/Libraries/Components/Keyboard/KeyboardAvoidingView';
-import { startDetecting } from 'react-native/Libraries/Utilities/PixelRatio';
-
+import { ref, set, update, onValue, remove } from "firebase/database";
+import { db } from '../firebase-config.js';
 
 const Train = () => {
   const [user] = useAuth()
   let [started, setStarted] = useState(false);
   let [results, setResults] = useState([]);
   let [startToResult, setStartToResult] = useState(false)
-
+  const [counter, setCounter] = useState(1);
   const [voiceData, setVoiceData] = useState([]);
   const [average, setAvverage] = useState('')
-
+  const [wpmFromDb, setWpmFromDb] = useState(1)
+  const [tembrFromDb, setTembrFromDB] = useState(1)
+  const [arrFromBd, setArrayFromBd] = useState([])
   const navigation = useNavigation()
+
+  if (typeof arrFromBd === 'undefined') {
+    arr = []
+    setArrayFromBd(arr)
+  }
+  console.log(arrFromBd, 'Из тренировки')
+
+  function Read(){
+    const starCountRef = ref(db, 'users/' + user.localId);
+    onValue(starCountRef, (snapshot) => {
+      const data = snapshot.val();
+      setCounter(data.countTrains + 1);   
+      setWpmFromDb(data.WordPerMinute)
+      setTembrFromDB(data.Tembr)
+      setArrayFromBd(data.ArrOfParasites)
+    });
+  }
+  useEffect(()=>{
+    Read();
+  },[]);
+  
 
   const [startTime, setStartTime] = useState('')
   const [stopTime, setStopTime] = useState('')
   const [timeToExport, setTimeToExport] = useState('')
   const [wordsInText, setWordsIntext] = useState('')
-
+  
   const toResult = () => {
-    navigation.navigate('Result',  {average, timeToExport, wordsInText, results})
-}
+    navigation.navigate('Result',  {average, timeToExport, wordsInText, results, counter, wpmFromDb, tembrFromDb, arrFromBd})
+  }
   
 
 
+  
   useEffect(() => {
     Voice.onSpeechError = onSpeechError;
     Voice.onSpeechResults = onSpeechResults;
     Voice.onSpeechVolumeChanged = onSpeechVolumeChanged;
     Voice.onSpeechStart = onSpeechStart;
-    return () => {
+    return () => {-
       Voice.destroy().then(Voice.removeAllListeners);
       
     }
@@ -66,10 +89,8 @@ const Train = () => {
     setStopTime(newStop)
     setStartTime(newStart)
     setStartToResult(true)
-    console.log(startToResult)
     let timeToExport = newStop - startTime
     setTimeToExport(timeToExport)
-    console.log('Время работы', timeToExport)
     
   };
 
@@ -78,10 +99,8 @@ const Train = () => {
     var allValue = result.value
     var theBestOption = allValue[Object.keys(allValue).pop()]
     setResults(theBestOption.toLowerCase())
-    console.log('Распозавание:', theBestOption)
     let wordsInText = setNumWordsInText(theBestOption)
     setWordsIntext(wordsInText)
-    console.log('Количество слов: ', wordsInText)
     let sum = 0;
     let count = 0;
     for (let i = 0; i < voiceData.length; i++) {
@@ -90,14 +109,14 @@ const Train = () => {
     }
     let average = sum / count;
     setAvverage(average)
-    console.log('Среднее значение громкости:', average)
-    // console.log('Частоты', voiceData)
+    
   
     
   };
 
   const onSpeechError = (error) => {
     console.log(error);
+    alert('Вас не слышно')
   
   };
 
@@ -108,7 +127,8 @@ const Train = () => {
     s = s.replace(/\n /, "\n")
     return s.split(" ").length
   }
-  
+
+ 
   return (
     <View style={styles.container}>
         <View style={styles.header}>
@@ -134,7 +154,10 @@ const Train = () => {
             </Pressable> : undefined}
              <Text style={styles.textWithSpaceStyle}>
           </Text>
-            <Pressable style={styles.result} onPress={toResult} disabled={!startToResult}>
+            <Pressable style={styles.result} onPress={() => {
+     toResult();
+     setCounter(counter + 1)
+    }} disabled={!startToResult}>
                 <Text style={styles.text_result}>Получить результат</Text>
             </Pressable>
         </View>
