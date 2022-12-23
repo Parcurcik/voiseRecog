@@ -45,7 +45,7 @@ const Statistics = () => {
     for (let i = 0; i < sorted_arr?.length && i < 7; i++)
       parasiteArr.push(
       <View key={i}>
-      <CustomOutput output={sorted_arr[i][0]} outputCount={sorted_arr[i][1]}/>
+      <CustomOutput output={sorted_arr[i][0]} outputCount={sorted_arr[i][1]} margin={3}/>
       </View>
       )
     return (<View>
@@ -98,8 +98,6 @@ const Statistics = () => {
         </View>
         <View style={styles.parasitesCont1}>
         <ParasiteWords/>
-        </View>
-        <View style={styles.parasitesCont2}>
         </View>
         <Image
         source={require('../assets/images/bottom_menu.png')}
@@ -158,16 +156,7 @@ const styles = StyleSheet.create({
 
     parasitesCont1: {
       flex: 1,
-      left: 40,
-      bottom: 150,
-      position: 'absolute'
-    },
-
-    parasitesCont2: {
-      flex: 1,
-      right: 40,
-      bottom: 150,
-      position: 'absolute'
+      bottom: 110
     },
 
      parasites: {

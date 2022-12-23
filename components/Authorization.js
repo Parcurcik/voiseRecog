@@ -10,10 +10,11 @@ import CustomInput from './CustomInput';
 import letterImg from '../assets/images/letter.png'
 import lockImg from '../assets/images/lock.png'
 import CustomButton from './CustomButton';
+import AlarmMessage from '../assets/images/AlarmMessage.svg';
 
 
 const Authorization = () => {
-
+  const alarmMessage = '        Application only for Russian language \n  (Приложение только для русского языка)'
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
@@ -82,6 +83,7 @@ const Authorization = () => {
                 <Pressable style={styles.registr} onPress={toRegistration}>
                     <Text style={styles.text_registr}>Переход на регистрацию</Text>
                 </Pressable>
+                <AlarmMessage style={styles.alarm}/>
         </View>
     )
 }
@@ -143,6 +145,10 @@ const styles = StyleSheet.create({
       color: COLORS.text,
       fontSize: 16,
       textDecorationLine: 'underline'
+  },
+
+  alarm: {
+      position: 'absolute',
+      top: 330,
   }
-  
 })
