@@ -157,7 +157,7 @@ const Train = () => {
             <Pressable style={styles.result} onPress={() => {
      toResult();
      setCounter(counter + 1)
-    }} disabled={!startToResult}>
+    }} disabled={!startToResult || results != undefined}>
                 <Text style={styles.text_result}>Получить результат</Text>
             </Pressable>
         </View>

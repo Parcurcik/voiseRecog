@@ -118,7 +118,9 @@ export default function Registration() {
                     value={name}
                     setValue={setName}
                     placeholder="Имя"
-                    margin={10}/>
+                    margin={10}
+                    />
+                    
                 
                 <CustomInput
                     value={surname}

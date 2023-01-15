@@ -98,7 +98,7 @@ export default Result = () => {
     const a = []
     if (wordsPerMinute <= 119) a.push('Вам необходимо увеличить количество слов в минуту до 120.')
     if (wordsPerMinute >= 180) a.push('Вам необходимо уменьшить количество слов в минуту до 170.')
-    if (newAverage <= 5.2) a.push('Говорите громче.')
+    if (newAverage <= 4) a.push('Говорите громче.')
     if (newAverage >= 8) a.push('Говорите тише.')
     if (output.length) a.push('Постарайтесь уменьшить количество слов-паразитов.')
     if (a.length ) return a.join('\n')
@@ -138,7 +138,7 @@ export default Result = () => {
   constWordsPerMinuteText = findWordsPerMinute(newCountWords, newTime)
 
   const findTembr = (newAverage) => {
-    if (newAverage <=5.2) return 'Вы говорите \n тихо'
+    if (newAverage <=4) return 'Вы говорите \n тихо'
     else if (newAverage >= 8) return 'Вы \n говорите громко'
     else return 'Вы говорите \n нужным тембром'
   }
@@ -171,7 +171,7 @@ export default Result = () => {
       </View>
       <View style={styles.paramsCont}>
         <Text style={(wordsPerMinute <=119 ) || (wordsPerMinute >= 180) ? styles.yellow_wpm : styles.green_wpm}>{wordsPerMinute + " " +findWord(wordsPerMinute)}</Text>
-        <Text style={(newAverage <=5.2 ) || (newAverage >= 8) ? styles.yellow_tembr : styles.green_tembr}>{findTembr(newAverage)}</Text>
+        <Text style={(newAverage <=4 ) || (newAverage >= 8) ? styles.yellow_tembr : styles.green_tembr}>{findTembr(newAverage)}</Text>
       </View>
       <View style={styles.wrongWordsCont}>
         <Text style={styles.wrongWords}>
@@ -183,7 +183,7 @@ export default Result = () => {
         <Text style={styles.uLevel}>
             Рекомендации
         </Text>
-        <Text style={((newAverage >=5.2 ) && (newAverage <= 8) && (wordsPerMinute > 119 && wordsPerMinute <=180) && output.length < 1) ? styles.goodSpeaker : styles.textRecomendations}>{makeRecomendations(wordsPerMinute, newAverage)}</Text>
+        <Text style={((newAverage >=4 ) && (newAverage <= 8) && (wordsPerMinute > 119 && wordsPerMinute <=180) && output.length < 1) ? styles.goodSpeaker : styles.textRecomendations}>{makeRecomendations(wordsPerMinute, newAverage)}</Text>
       </View>
     </View>
 )

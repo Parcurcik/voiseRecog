@@ -3,6 +3,7 @@ import { View, Text, StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Authorization from './components/Authorization';
+import FAQ from './components/FAQ';
 import { COLORS } from './assets/colors/colors';
 import Registration from './components/Registration';
 import Profile from './components/Profile';
@@ -27,6 +28,7 @@ const Navigator = () => {
       }}>
         <Stack.Screen  name="Authorization" component={Authorization} />
         <Stack.Screen name="Registration" component={Registration} />
+        <Stack.Screen name="FAQ" component={FAQ} />
       </Stack.Navigator>
     )
   }

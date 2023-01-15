@@ -63,7 +63,7 @@ const Statistics = () => {
   console.log('Средний тембр: ',findAvarageOfTembr )
 
   const takeImage = (findAvarageOfTembr) => {
-    if(findAvarageOfTembr >= 5)
+    if(findAvarageOfTembr >= 4)
     return tembrImgGreen
     else return tembrImgOrange
   }

@@ -28,6 +28,10 @@ const Authorization = () => {
     navigation.navigate('Registration')
   }
 
+  const toFAQ = () => {
+    navigation.navigate('FAQ')
+  }
+
   const [_, setUser] = useAuth()
 
   const hanldeLogin = () => {
@@ -69,7 +73,14 @@ const Authorization = () => {
                     
                     
                      <Header_text style={[styles.main_icon_text , {height: height * 0.3}]}
-                    resizeMode='contain'/>  
+                    resizeMode='contain'/>
+                    <Pressable style={styles.faq} onPress={toFAQ}>
+                      <Image
+                          source={require('../assets/images/faqImg.png')}
+                          style={styles.faq_img}
+                          resizeMode='contain'
+                      />
+                    </Pressable>
                 </View>
 
                 <CustomInput 
@@ -83,7 +94,6 @@ const Authorization = () => {
                 <Pressable style={styles.registr} onPress={toRegistration}>
                     <Text style={styles.text_registr}>Переход на регистрацию</Text>
                 </Pressable>
-                <AlarmMessage style={styles.alarm}/>
         </View>
     )
 }
@@ -101,7 +111,7 @@ const styles = StyleSheet.create({
   headerWrapper: {
       flexDirection: 'column',
       alignItems: 'center',
-      width: 331,
+      width: "80%",
       height: 331,
       marginBottom: 30,
   },
@@ -150,5 +160,18 @@ const styles = StyleSheet.create({
   alarm: {
       position: 'absolute',
       top: 330,
+  },
+
+  faq: {
+    position: 'absolute',
+    top: 20,
+    right: -35,
+    width: 40,
+    height: 40,
+  },
+
+  faq_img: {
+    width: 40,
+    height: 40,
   }
 })
