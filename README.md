@@ -14,6 +14,6 @@ APK файл можно скачать по [ссылке](https://disk.yandex.r
 
 Тимлид- [Худорожкова Е.Д](https://vk.com/hudorozhka)    
 Бэкенд-разработчик – [Безбородов П.А](https://vk.com/parcurcik)    
-Фронтенд-разработчик – [Проханов Г.О](https://vk.com/deadmonsterzap)    
+Фронтенд-разработчик – [Проханов Г.О](https://vk.com/deadmonsterzap) [GitHub](https://github.com/Dzharvizzz-coder)    
 Аналитик – [Иманкулов А.А](https://vk.com/justmodoy)    
 Дизайнер – [Хомуськов А.И](https://vk.com/s_khomuskov_7)    
