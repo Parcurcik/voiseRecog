@@ -25,16 +25,22 @@ const Authorization = () => {
 
   const navigation = useNavigation()
   const toRegistration = () => {
+    setError('')
     navigation.navigate('Registration')
   }
 
   const toFAQ = () => {
+    setError('')
     navigation.navigate('FAQ')
   }
 
   const [_, setUser] = useAuth()
 
   const hanldeLogin = () => {
+    
+  if (email != '' || password != ''){
+
+  
     setIsLoading(true)
     axios({
       method: 'POST',
@@ -49,11 +55,13 @@ const Authorization = () => {
     }).then(res => {
       setUser(res.data)
     })
-    .catch(e => {})
+    .catch(e => {setError('Неверно введенные данные')})
     .finally(() => {
       setIsLoading(false)
+      
     })
-
+  }
+  else  { setError('Введите данные от аккаунта')}
   }
 
   return (
@@ -90,6 +98,7 @@ const Authorization = () => {
                     placeholder="Пароль" value={password} setValue={setPassword} secureTextEntry={true} image = {lockImg}/>
                 
                 <CustomButton text='Войти' onPress={hanldeLogin} />
+                <Text style={styles.validate}>{error}</Text>
 
                 <Pressable style={styles.registr} onPress={toRegistration}>
                     <Text style={styles.text_registr}>Переход на регистрацию</Text>
@@ -111,42 +120,42 @@ const styles = StyleSheet.create({
   headerWrapper: {
       flexDirection: 'column',
       alignItems: 'center',
-      width: "80%",
-      height: 331,
-      marginBottom: 30,
+      width: '80%',
+      height: '40%',
+      marginBottom: '5%',
   },
 
   main_icon: {
       position: 'absolute',
-      width: 259,
-      height: 259,
+      width: '100%',
+      height: '75%',
       alignSelf: 'center',
-      top: 0,
+      top: '0%',
   },
 
   main_icon_text: {
       position: 'absolute',
-      width: 217,
-      height: 54,
+      width: '100%',
+      height: '100%',
       alignSelf: 'center',
-      top: 250,  
+      top: '70%',  
 
   },
 
   main_header: {
       position: 'absolute',
-      width: 331,
-      height: 331,
+      width: '100%',
+      height: '100%',
   },
 
   registr: {
       backgroundColor: 'transeparent',
-      width: 200,
-      height: 50,
-      marginVertical: 5,
+      width: '47%',
+      height: '10%',
+      marginVertical: '1%',
       alignItems: "center",
-      left: -80,
-      top: 30
+      right: '15%',
+      top: '-5%'
       
   },
 
@@ -157,21 +166,24 @@ const styles = StyleSheet.create({
       textDecorationLine: 'underline'
   },
 
-  alarm: {
-      position: 'absolute',
-      top: 330,
-  },
-
   faq: {
     position: 'absolute',
-    top: 20,
-    right: -35,
-    width: 40,
-    height: 40,
+    top: '7%',
+    right: "-9%",
+    width: "12%",
+    height: "12%",
   },
 
   faq_img: {
-    width: 40,
-    height: 40,
+    width: "100%",
+    height: "100%",
+  },
+
+  validate: {
+    position: 'absolute',
+    top: '39%',
+    fontFamily: 'OpenSans',
+    fontSize: 20,
+    color: '#ff0000'
   }
 })

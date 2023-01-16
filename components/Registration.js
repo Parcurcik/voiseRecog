@@ -1,4 +1,4 @@
-import { StyleSheet, View, Image, Pressable} from 'react-native'
+import { StyleSheet, View, Image, Pressable, Text} from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import axios from 'axios'
@@ -19,6 +19,7 @@ export default function Registration() {
   const navigation = useNavigation()
   const toLogin = () => {
     navigation.navigate('Authorization')
+    setError("")
   }
   
 
@@ -35,13 +36,36 @@ export default function Registration() {
   const [_, setUser] = useAuth()
 
 
+
+  
  
  
   const hanldeRegister = () => {
     if (password  !== confirmPassword){
-      alert("Пароли не совпадают!")
+      setError("Пароли не совпадают!")
     }
+    
+    
     else{
+      if (surname == '' | name == '' | email == '' | password == '' ){
+        setError("Заполните пустые поля!")
+      }
+      if (password !== ''){
+        if ( password  == confirmPassword ){
+          if( password.length < 6){
+            setError('Слишком короткий пароль')
+          }
+        }
+          
+          
+        
+       
+      }
+  
+  
+
+
+    
       setIsLoading(true)
     axios({
       method: 'POST',
@@ -78,6 +102,8 @@ export default function Registration() {
              console.log('Made new account');    
         })  
             .catch((error) => {
+
+              setError("")
                 console.log(error);
             });
         }).catch(e => {
@@ -88,11 +114,15 @@ export default function Registration() {
           setIsLoading(false);
         })
       })
-      .catch((error) => console.log(error.response.request._response))
+      .catch((error) => {console.log(error.response.request._response)
+        }
+      
+      )
 
     }
-    
   }
+    
+  
 
   return (
     <View
@@ -151,6 +181,7 @@ export default function Registration() {
                     text={"Зарегистрироваться"}
                     onPress={hanldeRegister}
                     margin={0}/>
+                    <Text style={styles.validate}>{error}</Text>
             </View>    
     </View>
 )
@@ -162,8 +193,8 @@ const styles = StyleSheet.create({
       backgroundColor: 'transeparent',
       flexDirection: 'column',
       alignItems:'center',
-      height: 100,
-      paddingTop: 50
+      height: '12%',
+      paddingTop: '12%'
   },
 
   container: {
@@ -173,36 +204,44 @@ const styles = StyleSheet.create({
   },
 
   quit_button: {
-      width: 30,
-      height: 10
+    width: '100%',
+    height: '100%',
   },
 
   quit_button_cont: {
       backgroundColor: 'transeparent',
       width: '100%',
       alignItems: "center",
-      paddingRight: 325
+      paddingRight: '80%'
   },
 
   logo_s: {
+      position:"absolute",
       width: 110,
       height: 110,
-      left: 150,
-      top: -130,
+      left: '65%',
   },
 
   cont_inp: {
       alignItems: 'center',
-      padding: 40,
+      paddingTop: '10%',
       flex: 1
   },
 
   regWord: {
       alignSelf: 'center',
-      marginTop: 30
+      marginTop: '5%'
   },
 
   cont: {
       flex: 1
+  },
+
+  validate: {
+    position:'absolute',
+    top: '-8%',
+    fontFamily: 'OpenSans',
+    fontSize: 15,
+    color: '#ff0000'
   }
 })

@@ -51,39 +51,40 @@ const styles = StyleSheet.create({
     },
 
     img_bg: {
-        width: 412,
-        height: 80,
+        width: '100%',
+        height: '9.75%',
     },
     
     logo_s: {
         width: 100,
         height: 100,
-        left: 150,
-        top: -130,
+        marginLeft: '85%',
+        marginBottom: '66.4%'
     },
 
     header: {
         backgroundColor: 'transeparent',
         flexDirection: 'row',
         alignItems:'center',
-        height: 100,
-        paddingTop: 180,
-        paddingRight: 35
+        height: '10%',
+        paddingTop: '43%',
+        paddingRight: '8.5%'
     },
 
     main_cont: {
         alignItems: 'center',
-        top: -90,
+        bottom: '10.5%',
         flex: 1,
     },
 
     result: {
+        position: 'absolute',
         backgroundColor: 'transeparent',
-        width: 178,
-        height: 25,
+        width: '35%',
+        height: '10%',
         alignItems: "center",
-        left: -63,
-        
+        right: '17.5%',
+        top: '95%'
     },
   
     text_result: {
@@ -97,20 +98,15 @@ const styles = StyleSheet.create({
         backgroundColor: 'transeparent',
         flexDirection: 'row',
         alignItems:'center',
-        height: 40,
+        height: '7%',
     },
 
     inp: {
       fontFamily: 'OpenSans-Medium',
         fontSize: 20,
-        height: 40,
-        width: 280,
+        height: 45,
+        width: '60%',
         alignSelf:'center',
         textAlign: 'center',
     },
-
-    replace_btn: {
-      width: 30,
-      height: 30
-    }
 })

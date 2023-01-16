@@ -19,8 +19,8 @@ const styles = StyleSheet.create({
         width: '100%',
         alignItems: 'center',
         alignSelf: 'center',
-        marginVertical: 2,
-        top: 10
+        marginVertical: '2%',
+        top: '15%'
     },
 
     img_bg: {
@@ -32,18 +32,19 @@ const styles = StyleSheet.create({
         fontFamily: 'OpenSans-Italic',
         fontSize: 16,
         color: 'rgba(207, 77, 79, 1)',
-        top: 7,
-        paddingStart: 15
+        top: '20%',
+        paddingStart: '6%'
     },
 
     textCount: {
         fontFamily: 'OpenSans-Italic',
         fontSize: 16,
         color: 'rgba(207, 77, 79, 1)',
-        top: 7,
+        top: '20%',
         position: 'absolute',
-        paddingLeft: 270
+        paddingLeft: '90%'
     }
 })
+
 
 export default CustomOutput

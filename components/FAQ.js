@@ -53,76 +53,43 @@ const styles = StyleSheet.create({
         backgroundColor: "rgba(243, 239, 239, 1)",
         alignItems: 'center'
     },
-
-    img_bg: {
-        width: 412,
-        height: 80,
-    },
     
     logo_s: {
         width: 100,
         height: 100,
-        left: 150,
-        top: -130,
+        marginLeft: '85%',
+        bottom: '34%',
     },
 
     header: {
         backgroundColor: 'transeparent',
         flexDirection: 'row',
         alignItems:'center',
-        height: 100,
-        paddingTop: 180,
-        paddingRight: 35
+        height: '15%',
+        paddingTop: '45%',
+        paddingRight: '8%'
     },
 
     main_cont: {
-        top: -50,
+        bottom: '7%',
+        width: '100%',
+        height: '60%',
         flex: 1,
-    },
-
-    result: {
-        backgroundColor: 'transeparent',
-        width: 178,
-        height: 25,
-        alignItems: "center",
-        left: -63,
-        
     },
   
     text_result: {
         fontFamily: 'OpenSans-Italic',
         color: COLORS.text,
-        fontSize: 18,
-        paddingTop: 15,
-        paddingRight: 20,
-        paddingLeft: 20
-    },
-
-    replace: {
-        backgroundColor: 'transeparent',
-        flexDirection: 'row',
-        alignItems:'center',
-        height: 40,
-    },
-
-    inp: {
-      fontFamily: 'OpenSans-Medium',
-        fontSize: 20,
-        height: 40,
-        width: 280,
-        alignSelf:'center',
-        textAlign: 'center',
-    },
-
-    replace_btn: {
-      width: 30,
-      height: 30
+        fontSize: 14,
+        paddingTop: '5%',
+        paddingRight: '5%',
+        paddingLeft: '5%'
     },
 
     quit_button: {
-        width: 30,
-        height: 10,
-        top: -15
+        width: '100%',
+        height: '100%',
+        top: '-100%'
     },
   
     quit_button_cont: {
@@ -130,7 +97,7 @@ const styles = StyleSheet.create({
         width: '100%',
         position: 'absolute',
         alignItems: "center",
-        right: 35,
-        top: 60
+        right: '55%',
+        paddingBottom: '10%'
     },
 })

@@ -195,24 +195,24 @@ const styles = StyleSheet.create({
       backgroundColor: 'transeparent',
       flexDirection: 'column',
       alignItems:'center',
-      height: 100,
-      paddingTop: 50
+      height: '12.5%',
+      paddingTop: '12.15%'
   },
 
   goodSpeaker: {
     color: '#0BAB00',
     fontSize: 18,
     fontFamily: 'OpenSans-BoldItalic',
-    paddingBottom: 10,
+    paddingBottom: '2%',
     textAlign: "center",
   },
 
 
   textRecomendations: {
     color: 'red',
-    fontSize: 18,
+    fontSize: 16,
     fontFamily: 'OpenSans-BoldItalic',
-    paddingBottom: 10,
+    paddingBottom: '2%',
     textAlign: "center",
   },
 
@@ -221,7 +221,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 18,
     position: 'absolute',
-    left: -135,
+    right: '6.5%',
     fontFamily: "OpenSans-BoldItalic",
   },
 
@@ -229,7 +229,7 @@ const styles = StyleSheet.create({
     color: '#0BAB00', 
     textAlign: 'center',
     fontSize: 18,
-    left: -135,
+    right: '6.5%',
     position: 'absolute',
     fontFamily: "OpenSans-BoldItalic",
   },
@@ -239,7 +239,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 18,
     position: 'absolute',
-    left: 5,
+    left: '1.2%',
     fontFamily: "OpenSans-BoldItalic",
   },
 
@@ -248,7 +248,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 18,
     position: 'absolute',
-    left: 27,
+    left: '6.2%',
     fontFamily: "OpenSans-BoldItalic",
   },
 
@@ -262,26 +262,26 @@ const styles = StyleSheet.create({
   quit_button: {
       width: 30,
       height: 10,
-      top: -15
+      bottom: '5%'
   },
 
   quit_button_cont: {
       backgroundColor: 'transeparent',
       width: '100%',
       alignItems: "center",
-      paddingRight: 325
+      paddingRight: '80%'
   },
 
   logo_s: {
       width: 100,
       height: 100,
-      left: 132.5,
-      top: -115,
+      left: '34.66%',
+      bottom: '215.5%',
   },
 
   resultText: {
       alignSelf: 'center',
-      marginTop: 25
+      marginTop: '6.1%'
   },
 
   cont: {
@@ -291,20 +291,20 @@ const styles = StyleSheet.create({
   textOptions: {
     backgroundColor: 'transeparent',
     flexDirection: 'row',
-    paddingTop: 30
+    paddingTop: '7.5%'
   },
 
   paramsCont: {
     backgroundColor: 'transeparent',
     flexDirection: 'row',
-    paddingTop: 10
+    paddingTop: '3%'
   },
 
   speed: {
     color: 'rgba(207, 77, 79, 0.75)',
     fontSize: 21,
     fontFamily: 'OpenSans',
-    paddingRight: 30
+    paddingRight: '7.5%'
   },
 
   tembr: {
@@ -321,14 +321,14 @@ const styles = StyleSheet.create({
 
   wrongWordsCont: {
     backgroundColor: 'transeparent',
-    top: 40
+    top: '5%'
   },
 
   result: {
     backgroundColor: 'transeparent',
     flexDirection: 'column',
     alignItems:'center',
-    top: 620,
+    top: '78%',
     position: 'absolute'
   },
 
@@ -336,12 +336,6 @@ const styles = StyleSheet.create({
     color: 'rgba(207, 77, 79, 0.75)',
     fontSize: 21,
     fontFamily: 'OpenSans',
-    paddingBottom: 10
+    paddingBottom: '2%'
   },
-
-  imgBgWW: {
-    width: 292,
-    height: 42,
-    top: 150,
-  }
 })

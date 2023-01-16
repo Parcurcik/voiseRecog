@@ -109,57 +109,54 @@ const Statistics = () => {
 export default Statistics
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: "rgba(243, 239, 239, 1)",
-        alignItems: 'center'
-    },
-
-    img_bg: {
-        width: 412,
-        height: 80,
-    },
-    
-    wpm_green: {
-      color: 'green'
-    },
-    logo_s: {
-        width: 100,
-        height: 100,
-        left: 150,
-        top: -130,
-    },
-
-    header: {
-        backgroundColor: 'transeparent',
-        flexDirection: 'row',
-        alignItems:'center',
-        height: 100,
-        paddingTop: 180,
-        paddingRight: 35
-    },
-
-    main_cont: {
-        alignItems: 'center',
-        top: -90,
-        flex: 1,
-    },
-
-    statisticOfParasite: {
-      fontFamily: 'OpenSans-Bold',
-      fontSize: 20,
-      textAlign: 'center',
-      width: 200,
-      marginTop: 45,
-      color: 'rgba(207, 77, 79, 0.75)'
-    },
-
-    parasitesCont1: {
+  container: {
       flex: 1,
-      bottom: 110
-    },
+      backgroundColor: "rgba(243, 239, 239, 1)",
+      alignItems: 'center'
+  },
 
-     parasites: {
-      
-     }
+  img_bg: {
+      width: '100%',
+      height: '9.75%',
+  },
+  
+  wpm_green: {
+    color: 'green'
+  },
+
+  logo_s: {
+      width: 100,
+      height: 100,
+      marginLeft: '85%',
+      marginBottom: '68.5%',
+  },
+
+  header: {
+      backgroundColor: 'transeparent',
+      flexDirection: 'row',
+      alignItems:'center',
+      height: 100,
+      paddingTop: '44.%',
+      paddingRight: '8.5%'
+  },
+
+  main_cont: {
+      alignItems: 'center',
+      bottom: '11%',
+      flex: 1,
+  },
+
+  statisticOfParasite: {
+    fontFamily: 'OpenSans-Bold',
+    fontSize: 20,
+    textAlign: 'center',
+    width: '100%',
+    marginTop: '12%',
+    color: 'rgba(207, 77, 79, 0.75)'
+  },
+
+  parasitesCont1: {
+    flex: 1,
+    top: '-16%'
+  },
 })

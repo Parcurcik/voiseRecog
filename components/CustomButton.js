@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'transeparent',
         width: 325,
         height: 100,
-        marginVertical: 45,
+        marginVertical: '11%',
         alignItems: "center"
     },
 
@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: "rgba(207, 77, 79, 0.5)",
         textAlign: 'center',
-        marginVertical: 30,
+        top: '30%',
         fontSize: 28
     },
 

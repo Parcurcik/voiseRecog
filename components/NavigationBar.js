@@ -75,8 +75,8 @@ export default NavigationBar = () => {
 
 const styles = StyleSheet.create({
     img_bg: {
-        width: 412,
-        height: 80
+        width: '100%',
+        height: '9.75%'
     },
 
     img_profile: {

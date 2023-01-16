@@ -27,15 +27,14 @@ const styles = StyleSheet.create({
         backgroundColor: 'transeparent',
         width: '100%',
         alignItems: 'center',
-        marginVertical: 5,
     },
 
     input: {
         fontFamily: 'OpenSans-Medium',
-        paddingStart: 25,
-        paddingEnd: 55,
+        paddingStart: '10%',
+        paddingEnd: '19%',
         fontSize: 20,
-        height: 72,
+        height: '100%',
     },
 
     img_bg: {
@@ -47,8 +46,8 @@ const styles = StyleSheet.create({
         width: 30,
         height: 30,
         position: 'absolute',
-        marginHorizontal: 280,
-        marginVertical: 21
+        left: '85%',
+        top: '30%'
     }
 })
 
